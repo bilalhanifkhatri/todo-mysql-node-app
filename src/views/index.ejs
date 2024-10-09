@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDo App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center content horizontally */
+      }
+      h1 {
+        color: #333;
+      }
+      .form-container {
+        width: 100%;
+        max-width: 600px; /* Set a max width for the form container */
+        margin-bottom: 20px; /* Space below the form */
+        background: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        width: 100%;
+        max-width: 600px; /* Set the same max width for the list */
+      }
+      li {
+        background: #fff;
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      form {
+        display: inline;
+      }
+      input[type="text"],
+      textarea {
+        margin: 5px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        width: calc(100% - 22px); /* Full width minus padding and border */
+      }
+      button {
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        padding: 10px 15px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #218838;
+      }
+      .edit-fields {
+        display: none; /* Initially hide the edit fields */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ToDo List</h1>
+
+    <!-- Form Container for Adding New ToDo -->
+    <div class="form-container">
+      <h2>Add New ToDo</h2>
+      <form action="/add" method="POST">
+        <input type="text" name="title" placeholder="Title" required />
+        <textarea name="description" placeholder="Description"></textarea>
+        <button type="submit">Add ToDo</button>
+      </form>
+    </div>
+
+    <!-- ToDo List -->
+    <ul>
+      <% todos.forEach(todo => { %>
+      <li>
+        <strong><%= todo.title %></strong> - <%= todo.description %>
+        <div>
+          <button onclick="toggleEditFields('<%= todo.id %>')">Edit</button>
+          <a href="/delete/<%= todo.id %>">Delete</a>
+          <form
+            id="edit-form-<%= todo.id %>"
+            class="edit-fields"
+            action="/edit/<%= todo.id %>"
+            method="POST"
+          >
+            <input type="text" name="title" value="<%= todo.title %>" />
+            <input
+              type="text"
+              name="description"
+              value="<%= todo.description %>"
+            />
+            <input type="checkbox" name="completed" <%= todo.completed ?
+            'checked' : '' %> /> Completed
+            <button type="submit">Update</button>
+          </form>
+        </div>
+      </li>
+      <% }); %>
+    </ul>
+
+    <script>
+      function toggleEditFields(todoId) {
+        const form = document.getElementById(`edit-form-${todoId}`);
+        if (form.style.display === "none" || form.style.display === "") {
+          form.style.display = "inline"; // Show the edit fields
+        } else {
+          form.style.display = "none"; // Hide the edit fields
+        }
+      }
+    </script>
+  </body>
+</html>
