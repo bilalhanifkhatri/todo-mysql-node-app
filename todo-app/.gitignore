@@ -31,8 +31,6 @@ coverage/
 # Optional npm cache directory
 .npm
 
-*.zip
-
 # Miscellaneous
 .DS_Store
 *.swp
